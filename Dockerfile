@@ -1,17 +1,44 @@
-FROM node:18.15.0 AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
+FROM node:20 AS builder
 
-FROM node:18.15.0 AS runner
-RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
-WORKDIR /home/node/app
-COPY --chown=node:node package*.json ./
-RUN npm install @nestjs/core
 USER node
-EXPOSE 8080
-COPY --from=builder --chown=node:node /app/dist  .
-# RUN npm run migration:run
-CMD ["npm", "run", "start:prod"]
+WORKDIR /home/node
+COPY package*.json ./
+RUN npm ci
+
+COPY --chown=node:node . .
+RUN npm run build \
+    && npm prune --omit=dev
+
+
+FROM node:20
+RUN if [ "$(uname -m)" != "x86_64" ]; then \
+    echo "Error: This Dockerfile requires the linux/amd64 platform." && \
+    echo "Please use: docker build --platform linux/amd64 ..." && \
+    exit 1; \
+    fi
+
+RUN apt-get update -y && apt-get install -y wget gnupg software-properties-common
+RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg
+RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" | tee /etc/apt/sources.list.d/google-chrome.list
+RUN apt-get update -y && apt-get install -y google-chrome-stable
+
+# ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+ENV PUPPETEER_EXECUTABLE_PATH /usr/bin/google-chrome-stable
+
+USER node
+WORKDIR /home/node
+
+COPY --from=builder --chown=node:node /home/node/package*.json ./
+COPY --from=builder --chown=node:node /home/node/node_modules/ ./node_modules/
+COPY --from=builder --chown=node:node /home/node/dist/ ./dist/
+
+CMD ["node", "dist/main.js"]
+
+# ENTRYPOINT ["tail"]
+# CMD ["-f","/dev/null"]
+# docker build --platform=linux/amd64 -t tradingview-capture .
+# docker run -p 8765:8765 tradingview-capture
+
+# docker tag tradingview-capture hungnt98/tradingview-capture 
+# docker build --platform=linux/amd64 -t hungnt98/tradingview-capture .
+# docker push hungnt98/tradingview-capture
