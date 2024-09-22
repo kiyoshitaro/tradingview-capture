@@ -16,7 +16,7 @@ TradingView Capture is a powerful tool designed to automate the process of captu
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/tradingview-capture.git
+   git clone https://github.com/kiyoshitaro/tradingview-capture.git
    ```
 
 2. Navigate to the project directory:
@@ -60,6 +60,28 @@ TradingView Capture is a powerful tool designed to automate the process of captu
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Docker
+
+The Docker image for this project is available on Docker Hub:
+
+```
+hungnt98/tradingview-capture
+```
+
+To build the Docker image locally:
+
+```
+docker build -t tradingview-capture .
+```
+
+To run the locally built Docker image:
+
+```
+docker run -e BIRDEYE_API_KEY=your_api_key_here -p 8765:8765 tradingview-capture
+```
+
+Remember to replace `your_api_key_here` with your actual Birdeye API key.
 
 ## Acknowledgements
 
