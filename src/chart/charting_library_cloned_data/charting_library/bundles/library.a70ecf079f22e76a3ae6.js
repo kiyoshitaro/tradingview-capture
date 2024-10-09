@@ -39922,11 +39922,7 @@
           if (null !== this._logoTextColor) {
             const t = await (function (e, t, i) {
               var s;
-              const svg = `<svg width="60" height="36" viewBox="0 0 30 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M5.97764 9.33676H4.25602V8L2.12802 9.42941L0 10.8588L2.12802 12.2882L4.25602 13.7176V12.3362H5.61926C6.739 12.3362 7.64609 13.2114 7.64609 14.2917V26H10.9024V14.0866C10.9024 11.4627 8.69896 9.33676 5.97936 9.33676H5.97764Z" fill="#BFFD17"/>
-<path d="M21.8704 9.42941L19.7423 8V9.33676H18.0207C15.3011 9.33676 13.0977 11.4627 13.0977 14.0866V26H16.354V14.2917C16.354 13.2114 17.2611 12.3362 18.3808 12.3362H19.7441V13.7176L21.8721 12.2882L24.0001 10.8588L21.8721 9.42941H21.8704Z" fill="#BFFD17"/>
-</svg>
-`
+              const svg = `<svg width="60" height="36" viewBox="0 0 30 32" fill="none" xmlns="http://www.w3.org/2000/svg"></svg>`
               const r = new DOMParser().parseFromString(svg, 'image/svg+xml');
             //   console.log("🚀 ~ G ~ t ~ O:", svg)
               null === (s = null == r ? void 0 : r.firstElementChild) ||
@@ -39957,7 +39953,7 @@
                 const n = (t + s.width) / r - 9,
                 o = (i + s.height) / r - 6;
                 (0, D.drawScaled)(e, r, () => {
-                    e.fillText('TradingView by Intent Trade', n, o);
+                    e.fillText('TradingView by kiyoshi', n, o);
                 }),
                 // console.log("🚀 ~ G ~ getImage ~ n:", n)
                 e.restore();

@@ -17,6 +17,11 @@ export class ChartDTO {
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
+  @Get('health')
+  healthCheck() {
+    return 1;
+  }
+
   @Get('data_chart')
   async dataChart(
     @Query('resolution') resolution: string,
